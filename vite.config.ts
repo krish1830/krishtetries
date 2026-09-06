@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
         react(),
         VitePWA({
           registerType: 'autoUpdate',
+          injectRegister: null,
           includeAssets: [
             'favicon.ico',
             'favicon.png',
@@ -34,6 +35,9 @@ export default defineConfig(({ mode }) => {
             orientation: 'portrait',
             start_url: '/',
             scope: '/',
+            lang: 'en',
+            dir: 'ltr',
+            categories: ['games', 'arcade', 'entertainment'],
             icons: [
               {
                 src: '/pwa-192x192.png',
@@ -52,6 +56,22 @@ export default defineConfig(({ mode }) => {
                 sizes: '512x512',
                 type: 'image/png',
                 purpose: 'maskable',
+              },
+            ],
+            screenshots: [
+              {
+                src: '/pwa-512x512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                form_factor: 'narrow',
+                label: 'Neon Tetris Gameplay',
+              },
+              {
+                src: '/pwa-512x512.png',
+                sizes: '512x512',
+                type: 'image/png',
+                form_factor: 'wide',
+                label: 'Neon Tetris Game HUD',
               },
             ],
           },
