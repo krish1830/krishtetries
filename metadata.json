@@ -1,0 +1,8 @@
+{
+  "name": "Neon Tetris AI",
+  "description": "A high-performance, mobile-optimized retro-neon Tetris game with AI game strategist, PWA support, and pilot profile tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
