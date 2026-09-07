@@ -8,7 +8,8 @@ import PWAInstallButton from './components/PWAInstallButton';
 import OfflineIndicator from './components/OfflineIndicator';
 import { Direction, Position, Board, Difficulty, UserProfile } from './types';
 
-const STORAGE_KEY = 'neon_tetris_profiles_v1';
+const STORAGE_KEY = 'building_blocks_profiles_v1';
+const LEGACY_STORAGE_KEY = 'neon_tetris_profiles_v1';
 const DEFAULT_PILOT: UserProfile = {
   id: 'default-pilot-01',
   name: 'CYBER-01',
@@ -39,7 +40,7 @@ const App: React.FC = () => {
 
   // Load profiles from storage
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -189,7 +190,7 @@ const App: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <h1 className="text-base sm:text-lg font-black tracking-wider text-white uppercase font-orbitron italic leading-tight">
-              Neon Tetris AI
+              BuildingBlocks
             </h1>
             <button 
               onClick={() => setIsProfileModalOpen(true)}
@@ -351,7 +352,7 @@ const App: React.FC = () => {
                   <span>AI Powered Grid</span>
                 </div>
                 <h2 className="text-4xl font-black italic font-orbitron text-white tracking-tighter uppercase">
-                  NEON TETRIS
+                  BUILDING BLOCKS
                 </h2>
                 <p className="text-[10px] text-slate-400 font-retro uppercase tracking-widest">
                   Select Difficulty Protocol

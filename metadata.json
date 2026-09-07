@@ -1,6 +1,6 @@
 {
-  "name": "Neon Tetris AI",
-  "description": "A high-performance, mobile-optimized retro-neon Tetris game with AI game strategist, PWA support, and pilot profile tracking.",
+  "name": "BuildingBlocks",
+  "description": "A high-performance, mobile-optimized retro-neon falling blocks puzzle game with AI game strategist, PWA support, and pilot profile tracking.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

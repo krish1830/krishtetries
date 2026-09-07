@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Neon Tetris AI",
-  "short_name": "NeonTetris",
-  "description": "A high-performance, mobile-optimized retro-neon Tetris game with AI game strategist, PWA support, and pilot profile tracking.",
+  "name": "BuildingBlocks",
+  "short_name": "BuildingBlocks",
+  "description": "A high-performance, mobile-optimized retro-neon falling blocks puzzle game with AI game strategist, PWA support, and pilot profile tracking.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -38,14 +38,14 @@
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Neon Tetris Gameplay"
+      "label": "BuildingBlocks Gameplay"
     },
     {
       "src": "/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Neon Tetris Game HUD"
+      "label": "BuildingBlocks Game HUD"
     }
   ]
 }

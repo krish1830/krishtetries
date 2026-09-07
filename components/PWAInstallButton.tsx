@@ -38,7 +38,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
         id="pwa-install-btn"
         onClick={install}
         className={`group flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-500/20 to-amber-600/30 border border-amber-500/50 hover:border-amber-400 hover:bg-amber-500/30 text-amber-300 transition-all rounded text-xs font-orbitron font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(245,158,11,0.2)] ${className}`}
-        title="Install Neon Tetris directly on your Android device"
+        title="Install BuildingBlocks directly on your Android device"
       >
         <i className="fa-brands fa-android text-sm text-green-400 group-hover:scale-110 transition-transform"></i>
         <span>{variant === 'full' ? 'Install Android App' : 'Install App'}</span>
@@ -76,7 +76,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
                 </button>
               </div>
               <p className="text-xs text-slate-300 font-sans leading-relaxed">
-                To install Neon Tetris as a standalone fullscreen app on your iPhone or iPad:
+                To install BuildingBlocks as a standalone fullscreen app on your iPhone or iPad:
               </p>
               <ol className="text-xs text-slate-300 space-y-2.5 font-sans pl-1">
                 <li className="flex items-center gap-2.5">
@@ -131,7 +131,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
                     Android & Hosting Hub
                   </h3>
                   <p className="text-[9px] text-slate-400 font-retro uppercase">
-                    Neon Tetris AI • WebAPK & Production Guide
+                    BuildingBlocks • WebAPK & Production Guide
                   </p>
                 </div>
               </div>
@@ -232,7 +232,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
                   </div>
                   <ol className="text-[11px] text-slate-300 space-y-1.5 list-decimal list-inside">
                     <li>Open this URL in <strong>Google Chrome</strong> on your Android phone.</li>
-                    <li>Look for the bottom banner: <strong>"Add Neon Tetris to Home screen"</strong>.</li>
+                    <li>Look for the bottom banner: <strong>"Add BuildingBlocks to Home screen"</strong>.</li>
                     <li>Or tap Chrome's 3-dot menu (<i className="fa-solid fa-ellipsis-vertical mx-1"></i>) and choose <strong>"Install app"</strong>.</li>
                     <li>Android installs a real <strong>WebAPK</strong> on your app drawer with fullscreen immersion and offline play!</li>
                   </ol>
