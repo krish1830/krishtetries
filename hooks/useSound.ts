@@ -58,5 +58,23 @@ export const useSound = () => {
     });
   }, [playSound]);
 
-  return { playMove, playRotate, playClear, playDrop, playGameOver, playBomb };
+  const playLevelUp = useCallback(() => {
+    init();
+    if (!audioCtx.current) return;
+    const notes = [440, 554.37, 659.25, 880];
+    notes.forEach((f, idx) => {
+      setTimeout(() => playSound(f, 'triangle', 0.18, 0.2), idx * 80);
+    });
+  }, [playSound]);
+
+  const playDhandamVictory = useCallback(() => {
+    init();
+    if (!audioCtx.current) return;
+    const fanfareNotes = [523.25, 659.25, 783.99, 1046.5, 880, 1046.5, 1318.51];
+    fanfareNotes.forEach((f, idx) => {
+      setTimeout(() => playSound(f, idx >= 4 ? 'triangle' : 'sine', 0.35, 0.25), idx * 110);
+    });
+  }, [playSound]);
+
+  return { playMove, playRotate, playClear, playDrop, playGameOver, playBomb, playLevelUp, playDhandamVictory };
 };

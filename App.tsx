@@ -6,6 +6,7 @@ import GameUI from './components/GameUI';
 import AISuggestions from './components/AISuggestions';
 import PWAInstallButton from './components/PWAInstallButton';
 import OfflineIndicator from './components/OfflineIndicator';
+import MilestoneBanners from './components/MilestoneBanners';
 import { Direction, Position, Board, Difficulty, UserProfile } from './types';
 
 const STORAGE_KEY = 'building_blocks_profiles_v1';
@@ -35,8 +36,11 @@ const App: React.FC = () => {
   const { 
     board, activePiece, nextPiece, score, highScore, level, lines, bombs, useBomb,
     gameOver, paused, difficulty, isGameStarted, setPaused, 
-    move, rotate, hardDrop, resetGame, startGame, resumeGame, hasSave 
+    move, rotate, hardDrop, resetGame, startGame, resumeGame, hasSave,
+    levelUpEvent, dismissLevelUp, showDhandamBanner, dismissDhandamBanner, hasAwardedDhandam,
+    checkCollision
   } = useTetris(activeProfile);
+
 
   // Load profiles from storage
   useEffect(() => {
@@ -189,9 +193,16 @@ const App: React.FC = () => {
             <i className="fa-solid fa-shapes text-sm"></i>
           </div>
           <div className="flex flex-col">
-            <h1 className="text-base sm:text-lg font-black tracking-wider text-white uppercase font-orbitron italic leading-tight">
-              BuildingBlocks
-            </h1>
+            <div className="flex items-center gap-1.5">
+              <h1 className="text-base sm:text-lg font-black tracking-wider text-white uppercase font-orbitron italic leading-tight">
+                BuildingBlocks
+              </h1>
+              {(activeProfile.tetrisStats.bestScore >= 100000 || hasAwardedDhandam) && (
+                <span className="px-1.5 py-0.5 bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-orbitron font-black text-[8px] rounded uppercase tracking-wider shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+                  Dhootha 🫡
+                </span>
+              )}
+            </div>
             <button 
               onClick={() => setIsProfileModalOpen(true)}
               className="text-[9px] text-amber-400 font-retro uppercase flex items-center gap-1.5 hover:text-amber-300 text-left transition-colors"
@@ -304,16 +315,16 @@ const App: React.FC = () => {
 
               <div className="flex flex-col gap-3">
                 <button 
-                  onClick={() => startGame(difficulty)} 
+                  onClick={() => startGame()} 
                   className="w-full py-4 bg-white text-black font-black font-orbitron uppercase italic tracking-widest hover:bg-amber-400 transition-all rounded-lg shadow-[0_0_20px_rgba(245,158,11,0.2)]"
                 >
-                  REBOOT SYSTEM
+                  PLAY AGAIN
                 </button>
                 <button 
                   onClick={resetGame} 
                   className="w-full py-3 border border-slate-800 bg-slate-900/40 text-slate-400 hover:text-white font-orbitron text-xs font-bold uppercase tracking-widest transition-all rounded-lg"
                 >
-                  CHANGE PROTOCOL
+                  RETURN TO BASE
                 </button>
               </div>
             </div>
@@ -344,57 +355,108 @@ const App: React.FC = () => {
               </div>
             </div>
           ) : (
-            /* Game Start Screen: Difficulty Selector */
-            <div className="space-y-6 animate-in zoom-in duration-300 max-w-sm w-full">
+            /* Game Start Screen: Play Button along with Pilot Details */
+            <div className="space-y-5 animate-in zoom-in duration-300 max-w-sm w-full">
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-[9px] font-retro uppercase">
-                  <i className="fa-solid fa-microchip"></i>
-                  <span>AI Powered Grid</span>
+                  <i className="fa-solid fa-shapes"></i>
+                  <span>100K Dhootha Challenge</span>
                 </div>
-                <h2 className="text-4xl font-black italic font-orbitron text-white tracking-tighter uppercase">
+                <h2 className="text-3xl sm:text-4xl font-black italic font-orbitron text-white tracking-tighter uppercase">
                   BUILDING BLOCKS
                 </h2>
-                <p className="text-[10px] text-slate-400 font-retro uppercase tracking-widest">
-                  Select Difficulty Protocol
+                <p className="text-[9px] text-slate-400 font-retro uppercase tracking-widest">
+                  Progressive Shape Architecture
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3">
-                {(Object.keys(Difficulty) as Array<keyof typeof Difficulty>).map((diff) => (
-                  <button 
-                    key={diff} 
-                    onClick={() => startGame(Difficulty[diff])}
-                    className="w-full py-3.5 border border-slate-800 bg-slate-900/60 text-white font-black font-orbitron uppercase italic tracking-widest hover:border-amber-400 hover:bg-amber-500/10 transition-all rounded-lg flex items-center justify-between px-6 group"
+              {/* Pilot Details Card */}
+              <div className="bg-slate-950/90 border border-amber-500/30 rounded-xl p-4 shadow-[0_0_20px_rgba(245,158,11,0.08)] relative overflow-hidden text-left">
+                <div className="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 text-lg">
+                      <i className="fa-solid fa-user-astronaut"></i>
+                    </div>
+                    <div>
+                      <div className="text-[8px] text-slate-500 font-retro uppercase tracking-wider">Pilot In Command</div>
+                      <div className="font-orbitron font-black text-white text-base flex items-center gap-1.5">
+                        <span>{activeProfile.name}</span>
+                        {(activeProfile.tetrisStats.bestScore >= 100000 || hasAwardedDhandam) && (
+                          <span title="Dhandam ra dhootha Title Holder" className="text-amber-400 text-xs">👑</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsProfileModalOpen(true)}
+                    className="px-2.5 py-1 text-[9px] text-amber-400 hover:text-amber-300 font-orbitron uppercase border border-amber-500/30 hover:border-amber-400/60 bg-amber-500/10 rounded transition-all tracking-wider"
                   >
-                    <span>{diff}</span>
-                    <span className="text-[9px] text-slate-500 font-retro group-hover:text-amber-400">
-                      {diff === 'Easy' ? '1.0x SPD' : diff === 'Medium' ? '1.4x SPD' : '2.5x SPD'}
-                    </span>
+                    Switch
                   </button>
-                ))}
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-black/50 p-2 rounded border border-slate-800/80">
+                    <div className="text-[7px] text-slate-500 font-retro uppercase">Best Score</div>
+                    <div className="text-xs font-black font-orbitron text-amber-400 truncate mt-0.5">
+                      {activeProfile.tetrisStats.bestScore.toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="bg-black/50 p-2 rounded border border-slate-800/80">
+                    <div className="text-[7px] text-slate-500 font-retro uppercase">Lines</div>
+                    <div className="text-xs font-black font-orbitron text-white truncate mt-0.5">
+                      {activeProfile.tetrisStats.totalLines}
+                    </div>
+                  </div>
+                  <div className="bg-black/50 p-2 rounded border border-slate-800/80">
+                    <div className="text-[7px] text-slate-500 font-retro uppercase">Missions</div>
+                    <div className="text-xs font-black font-orbitron text-white truncate mt-0.5">
+                      {activeProfile.tetrisStats.gamesPlayed}
+                    </div>
+                  </div>
+                </div>
+
+                {activeProfile.tetrisStats.bestScore >= 100000 && (
+                  <div className="mt-2.5 px-2.5 py-1 bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-transparent border border-amber-500/40 rounded flex items-center gap-2">
+                    <span className="text-amber-400 text-xs">🫡</span>
+                    <span className="text-[8px] font-orbitron font-black text-amber-300 uppercase tracking-widest">
+                      DHANDAM RA DHOOTHA HONORED
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {hasSave && (
+              {/* Action Buttons: Play button & Resume if available */}
+              <div className="flex flex-col gap-3">
                 <button 
-                  onClick={resumeGame}
-                  className="w-full py-3 border border-cyan-500/40 bg-cyan-950/20 text-cyan-400 font-orbitron text-xs font-black uppercase tracking-widest hover:bg-cyan-500/20 transition-all rounded-lg flex items-center justify-center gap-2"
+                  id="play-game-btn"
+                  onClick={() => startGame()}
+                  className="w-full py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 text-black font-black font-orbitron text-base uppercase italic tracking-widest transition-all rounded-xl shadow-[0_0_30px_rgba(245,158,11,0.45)] hover:shadow-[0_0_40px_rgba(245,158,11,0.7)] flex items-center justify-center gap-3 active:scale-[0.98] group"
                 >
-                  <i className="fa-solid fa-floppy-disk text-xs"></i>
-                  <span>RESUME SAVED SESSION</span>
+                  <i className="fa-solid fa-play text-sm group-hover:scale-110 transition-transform"></i>
+                  <span>PLAY</span>
                 </button>
-              )}
 
-              <div className="pt-2 flex items-center justify-between text-left text-xs border-t border-slate-800/60">
-                <div>
-                  <div className="text-[9px] text-slate-500 font-retro uppercase">Current Pilot</div>
-                  <div className="font-orbitron font-bold text-white text-sm">{activeProfile.name}</div>
+                {hasSave && (
+                  <button 
+                    onClick={resumeGame}
+                    className="w-full py-3 border border-cyan-500/40 bg-cyan-950/30 text-cyan-400 font-orbitron text-xs font-black uppercase tracking-widest hover:bg-cyan-500/20 hover:border-cyan-400 transition-all rounded-xl flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                  >
+                    <i className="fa-solid fa-floppy-disk text-xs"></i>
+                    <span>RESUME SAVED SESSION</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Protocol Briefing */}
+              <div className="p-3 rounded-lg bg-black/40 border border-slate-800/80 text-left">
+                <div className="flex items-center gap-1.5 text-[8px] font-retro text-amber-400 uppercase mb-1">
+                  <i className="fa-solid fa-info-circle text-[9px]"></i>
+                  <span>Flight Protocol</span>
                 </div>
-                <button
-                  onClick={() => setIsProfileModalOpen(true)}
-                  className="text-[10px] text-amber-400 hover:text-amber-300 font-orbitron uppercase underline tracking-wider"
-                >
-                  Switch Pilot
-                </button>
+                <p className="text-[10px] text-slate-400 font-sans leading-relaxed">
+                  Every <strong className="text-amber-300">10,000 points</strong> advances your level and unlocks exotic new block shapes. Reach <strong className="text-yellow-300">100,000 points</strong> to claim the supreme <strong className="text-amber-400">"Dhandam ra dhootha"</strong> victory banner!
+                </p>
               </div>
             </div>
           )}
@@ -483,6 +545,17 @@ const App: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Level Up and 100k Dhandam ra dhootha Celebration Banners */}
+      <MilestoneBanners
+        levelUpEvent={levelUpEvent}
+        onDismissLevelUp={dismissLevelUp}
+        showDhandamBanner={showDhandamBanner}
+        onDismissDhandam={dismissDhandamBanner}
+        score={score}
+        lines={lines}
+        activeProfile={activeProfile}
+      />
 
       <OfflineIndicator />
     </div>
